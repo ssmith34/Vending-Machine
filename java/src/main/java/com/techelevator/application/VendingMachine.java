@@ -22,6 +22,7 @@ public class VendingMachine
             }
             else if(choice.equals("exit"))
             {
+                // "s" implementation for sales report
                 // good bye
                 break;
             }
