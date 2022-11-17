@@ -11,10 +11,10 @@ public class Sales {
     private Map<String, Integer> soldAtDiscount = new HashMap<>();
 
     public void setMoneyInserted(double moneyIn) {
-        this.totalMoneyInserted += moneyIn;
+        totalMoneyInserted += moneyIn;
     }
 
-    public static double getTotalMoneyInserted() {
+    public double getTotalMoneyInserted() {
         return totalMoneyInserted;
     }
 }

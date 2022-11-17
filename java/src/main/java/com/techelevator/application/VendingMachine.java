@@ -13,6 +13,8 @@ import java.util.Scanner;
 public class VendingMachine<Item>
 {
 
+    UserInput userInput = new UserInput();
+
     List<Items> items = new ArrayList<>();
 
     public void loadFile() {
@@ -48,31 +50,31 @@ public class VendingMachine<Item>
     public void run()
     {
         loadFile();
-        while(true)
-        {
+        while(true) {
             UserOutput.displayHomeScreen();
             String choice = UserInput.getHomeScreenOption();
 
-            if(choice.equals("display"))
-            {
-                for(Items item : items)
+            if (choice.equals("display")) {
+                for (Items item : items)
                     System.out.println(item);
 
-            }
-            else if(choice.equals("purchase"))
-            {
-                // make a purchase
-            }
-            else if(choice.equals("sales report"))
-            {
+            } else if (choice.equals("purchase")) {
+                userInput.displayPurchaseMessage();
+            } else if (choice.equals("sales report")) {
                 // print sales report
-            }
-            else if(choice.equals("exit"))
-            {
+            } else if (choice.equals("exit")) {
                 // good bye
                 break;
             }
         }
     }
-    
-}
+
+    public static void getItem(String itemChosen) {
+        for(Items item : items) {
+
+        }
+    }
+
+    }
+
+
