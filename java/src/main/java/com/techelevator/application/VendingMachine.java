@@ -61,7 +61,7 @@ public class VendingMachine<Item>
             }
             else if(choice.equals("purchase"))
             {
-                // make a purchase
+                UserInput.displayPurchaseMessage();
             }
             else if(choice.equals("sales report"))
             {
@@ -74,5 +74,4 @@ public class VendingMachine<Item>
             }
         }
     }
-    
 }

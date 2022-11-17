@@ -73,5 +73,6 @@ public class UserInput
         else {
             return "";
         }
+        return "";
     }
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 public class Sales {
 
     private double totalSales;
-    private double totalMoneyInserted;
+    private static double totalMoneyInserted;
     private int itemsSold;
     private Map<String, Integer> soldAtDiscount = new HashMap<>();
 
