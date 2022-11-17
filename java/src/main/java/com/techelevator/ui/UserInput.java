@@ -1,5 +1,7 @@
 package com.techelevator.ui;
 
+import com.techelevator.application.Sales;
+
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -27,24 +29,49 @@ public class UserInput
         String selectedOption = scanner.nextLine();
         String option = selectedOption.trim();
 
-        if (option.equals("D"))
+        if (option.equalsIgnoreCase("D"))
         {
             return "display";
         }
-        else if (option.equals("P"))
+        else if (option.equalsIgnoreCase("P"))
         {
             return "purchase";
         }
-        else if (option.equals("E"))
+        else if (option.equalsIgnoreCase("E"))
         {
             return "exit";
+        }
+        else if (option.equalsIgnoreCase("S"))
+        {
+            return "sales report";
         }
         else
         {
             return "";
         }
-
     }
 
-    
+    public static String displayPurchaseMessage() {
+        System.out.println("(M) Feed Money");
+        System.out.println("(S) Select Item");
+        System.out.println("(F) Finish Transaction\n");
+        System.out.println("Current Money Provided: $" + Sales.getTotalMoneyInserted());
+        System.out.print("Please select an option: ");
+
+        String selectedOption = scanner.nextLine();
+        String option = selectedOption.trim();
+
+        if(option.equalsIgnoreCase("M")) {
+            // feed money into machine
+        }
+        else if(option.equalsIgnoreCase("S")) {
+            // purchase item
+        }
+        else if(option.equalsIgnoreCase("F")) {
+            // Finish Transaction
+        }
+        else {
+            return "";
+        }
+    }
 }

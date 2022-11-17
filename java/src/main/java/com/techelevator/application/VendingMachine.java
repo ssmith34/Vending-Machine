@@ -47,9 +47,7 @@ public class VendingMachine<Item>
 
     public void run()
     {
-
         loadFile();
-
         while(true)
         {
             UserOutput.displayHomeScreen();
@@ -57,15 +55,20 @@ public class VendingMachine<Item>
 
             if(choice.equals("display"))
             {
-                // display the vending machine slots
+                for(Items item : items)
+                    System.out.println(item);
+
             }
             else if(choice.equals("purchase"))
             {
                 // make a purchase
             }
+            else if(choice.equals("sales report"))
+            {
+                // print sales report
+            }
             else if(choice.equals("exit"))
             {
-                // "s" implementation for sales report
                 // good bye
                 break;
             }
