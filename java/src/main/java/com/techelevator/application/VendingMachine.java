@@ -70,7 +70,7 @@ public class VendingMachine<Item>
     }
 
     public static void getItem(String itemChosen) {
-        for(Items item : items) {
+//        for(Items item : items) {
 
         }
     }

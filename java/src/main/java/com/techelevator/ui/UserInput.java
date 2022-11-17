@@ -93,4 +93,5 @@ public class UserInput {
                     System.out.println("Invalid amount. Please select $1, $5, $10, $20");
             }
         }
+        return "";
     }
