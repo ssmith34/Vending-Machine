@@ -12,10 +12,13 @@ import java.util.Scanner;
 
 public class VendingMachine<Item>
 {
-
+    Sales sales = new Sales();
     UserInput userInput = new UserInput();
-
     List<Items> items = new ArrayList<>();
+    private double moneyInserted;
+    private String chosenItem;
+    private int itemsPurchased;
+    private static final int SOLD_PER_DISCOUNT = 1;
 
     public void loadFile() {
         File file = new File("catering.csv");
@@ -38,43 +41,76 @@ public class VendingMachine<Item>
                     Items gum = new Gum(lineArr[1], Double.parseDouble(lineArr[2]), lineArr[0], "Chewy, Chewy, Lots O Bubbles!");
                     items.add(gum);
                 }
-
             }
-
         } catch(FileNotFoundException e) {
             System.out.println("Vending machine 404 error.");
         }
-
     }
 
-    public void run()
-    {
+    public void run() {
         loadFile();
-        while(true) {
+        while (true) {
             UserOutput.displayHomeScreen();
-            String choice = UserInput.getHomeScreenOption();
+            UserOutput.displayMainMenu();
+            String choice = UserInput.getMainMenuOption();
 
             if (choice.equals("display")) {
-                for (Items item : items)
-                    System.out.println(item);
-
+                UserOutput.displayVendingMachineItems(items);
             } else if (choice.equals("purchase")) {
-                userInput.displayPurchaseMessage();
-            } else if (choice.equals("sales report")) {
-                // print sales report
+                boolean keepGoing = true;
+                while (keepGoing) {
+                    UserOutput.displayPurchaseMenu(moneyInserted);
+                    choice = UserInput.getPurchaseMenuOption();
+                    switch (choice) {
+                        case "Feed Money":
+                            UserOutput.displayMoneyMenu();
+                            moneyInserted += UserInput.getMoneyOption();
+                            break;
+                        case "Select Item":
+                            UserOutput.displayVendingMachineItems(items);
+                            UserOutput.displayItemPrompt();
+                            chosenItem = UserInput.getItemOption();
+                            getItem(chosenItem);
+                            break;
+                        case "Finish":
+                            // reset itemsPurchased
+                            keepGoing = false;
+
+                    }
+                }
+            }
+            else if (choice.equals("sales report")) {
+                    // print sales report
             } else if (choice.equals("exit")) {
-                // good bye
-                break;
+                    // good bye
+                    break;
+            }
+        }
+    }
+    private void getItem (String chosenItem){
+        for(Items item : items) {
+            if(chosenItem.equals(item.getSlotNumber()) && item.getAmountLeft() == 0) {
+                System.out.println("That item is no longer available, please choose again.");
+                return;
+            }
+            if(chosenItem.equals(item.getSlotNumber())) {
+                itemsPurchased++;
+                if(itemsPurchased % 2 == 0) {
+                    item.removeItem();
+                    sales.setTotalSales(item.getPrice() - 1.00);
+                    sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
+                    moneyInserted -= item.getPrice() + 1.00;
+                }
+                else{
+                    item.removeItem();
+                    sales.setTotalSales(item.getPrice());
+                    sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
+                    moneyInserted -= item.getPrice();
+                }
             }
         }
     }
 
-    public static void getItem(String itemChosen) {
-//        for(Items item : items) {
-
-        }
-    }
-
-    }
+}
 
 

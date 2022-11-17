@@ -37,6 +37,10 @@ public abstract class Items {
         return this.dispenseMessage;
     }
 
+    public void removeItem() {
+        amountLeft -= 1;
+    }
+
     public String toString() {
         if(amountLeft < 1) {
             return slotNumber + ": " + name + ", Price: $" + price + " Remaining: NO LONGER AVAILABLE" ;
