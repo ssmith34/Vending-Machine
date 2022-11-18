@@ -13,9 +13,10 @@ import java.util.Scanner;
 public class VendingMachine<Item>
 {
     Sales sales = new Sales();
-    UserInput userInput = new UserInput();
+    Audit audit = new Audit("Audit.txt");
     List<Items> items = new ArrayList<>();
     private double moneyInserted;
+    private double totalMoney;
     private String chosenItem;
     private int itemsPurchased;
     private static final int SOLD_PER_DISCOUNT = 1;
@@ -60,12 +61,19 @@ public class VendingMachine<Item>
             } else if (choice.equals("purchase")) {
                 boolean keepGoing = true;
                 while (keepGoing) {
-                    UserOutput.displayPurchaseMenu(moneyInserted);
+                    UserOutput.displayPurchaseMenu(totalMoney);
                     choice = UserInput.getPurchaseMenuOption();
                     switch (choice) {
                         case "Feed Money":
                             UserOutput.displayMoneyMenu();
-                            moneyInserted += UserInput.getMoneyOption();
+                            moneyInserted = UserInput.getMoneyOption();
+                            totalMoney += moneyInserted;
+                            if(moneyInserted != 0.00) {
+                                // Ten spaces for spacing
+                                audit.write("MONEY FED:          $"
+                                        + String.format("%.2f", moneyInserted) + "    $"
+                                        + String.format("%.2f", totalMoney));
+                            }
                             break;
                         case "Select Item":
                             UserOutput.displayVendingMachineItems(items);
@@ -74,7 +82,7 @@ public class VendingMachine<Item>
                             getItem(chosenItem);
                             break;
                         case "Finish":
-                            if(moneyInserted > 0.0) {
+                            if(totalMoney > 0.0) {
                                 getChange();
                             }
                             keepGoing = false;
@@ -102,8 +110,9 @@ public class VendingMachine<Item>
                     item.removeItem();
                     sales.setTotalSales(item.getPrice() - DISCOUNT_AMOUNT);
                     sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
-                    moneyInserted -= item.getPrice() + DISCOUNT_AMOUNT;
-                    System.out.println("Dispensing " + item.getName() + " for $" + item.getPrice() + ", money remaining: $" + moneyInserted);
+                    totalMoney -= (item.getPrice() - DISCOUNT_AMOUNT);
+                    System.out.println("Dispensing " + item.getName() + " for $"
+                            + (item.getPrice() - DISCOUNT_AMOUNT) + ", money remaining: $" + String.format("%.2f", totalMoney));
                     System.out.println(item.getDispenseMessage());
                     return;
                 }
@@ -111,8 +120,9 @@ public class VendingMachine<Item>
                     item.removeItem();
                     sales.setTotalSales(item.getPrice());
                     sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
-                    moneyInserted -= item.getPrice();
-                    System.out.println("Dispensing " + item.getName() + " for $" + item.getPrice() + ", money remaining: $" + moneyInserted);
+                    totalMoney -= item.getPrice();
+                    System.out.println("Dispensing " + item.getName() + " for $"
+                            + item.getPrice() + ", money remaining: $" + String.format("%.2f", totalMoney));
                     System.out.println(item.getDispenseMessage());
                     return;
                 }
@@ -122,12 +132,12 @@ public class VendingMachine<Item>
     }
 
     public void getChange() {
-        double changeDue = moneyInserted;
+        double changeDue = totalMoney;
         int dollars = 0;
         int quarters = 0;
         int dimes = 0;
         int nickels = 0;
-        int moneyInt = (int)((moneyInserted + 0.0001) * 100);
+        int moneyInt = (int)((totalMoney + 0.0001) * 100);
         while(moneyInt > 0) {
             if (moneyInt >= 100) {
                 dollars = moneyInt / 100;
@@ -147,6 +157,8 @@ public class VendingMachine<Item>
             }
         }
         UserOutput.displayChangeMessage(dollars, quarters, dimes, nickels, changeDue);
+        totalMoney = 0.0;
+        moneyInserted = 0.0;
     }
 }
 

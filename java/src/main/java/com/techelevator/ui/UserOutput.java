@@ -47,7 +47,8 @@ public class UserOutput
         System.out.println("(S) Select Item");
         System.out.println("(F) Finish Transaction\n");
 
-        System.out.println("Current Money Provided: $" + moneyInserted);
+        System.out.println();
+        System.out.printf("Current Money Provided: $%.2f", moneyInserted);
         System.out.println();
         System.out.print("Please select an option: ");
     }
@@ -66,11 +67,11 @@ public class UserOutput
     }
 
     public static void displayChangeMessage(int dollars, int quarters, int dimes, int nickels, double changeDue) {
-        System.out.println("Thank you! Your change is:");
+        System.out.println("\nThank you! Your change is:");
         System.out.println(dollars + " dollars");
         System.out.println(quarters + " quarters");
         System.out.println(dimes + " dimes");
         System.out.println(nickels + " nickels");
-        System.out.println("Total change: $" + changeDue);
+        System.out.printf("Total change: $%.2f", changeDue);
     }
 }
