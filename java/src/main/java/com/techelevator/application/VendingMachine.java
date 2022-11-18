@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class VendingMachine<Item>
+public class VendingMachine
 {
     Sales sales = new Sales();
     Audit audit = new Audit("Audit.txt");
-    List<Items> items = new ArrayList<>();
+    private List<Items> items = new ArrayList<>();
     private double moneyInserted;
     private double totalMoney;
     private String chosenItem;
@@ -85,6 +85,7 @@ public class VendingMachine<Item>
                             if(totalMoney > 0.0) {
                                 getChange();
                             }
+
                             keepGoing = false;
 
                     }
@@ -98,7 +99,7 @@ public class VendingMachine<Item>
             }
         }
     }
-    private void getItem (String chosenItem){
+    public void getItem (String chosenItem){
         for(Items item : items) {
             if(chosenItem.equalsIgnoreCase(item.getSlotNumber()) && item.getAmountLeft() == 0) {
                 System.out.println("That item is no longer available, please choose again.");
@@ -113,7 +114,8 @@ public class VendingMachine<Item>
                     sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
                     totalMoney -= (item.getPrice() - DISCOUNT_AMOUNT);
                     System.out.println("Dispensing " + item.getName() + " for $"
-                            + (item.getPrice() - DISCOUNT_AMOUNT) + ", money remaining: $" + String.format("%.2f", totalMoney));
+                            + (item.getPrice() - DISCOUNT_AMOUNT) + ", money remaining: $" +
+                            String.format("%.2f", totalMoney));
                     System.out.println(item.getDispenseMessage());
                     audit.write(item.getName() + "        " + item.getSlotNumber() + " $"
                             + String.format("%.2f", beforePurchaseTotal) + "    $"
@@ -163,10 +165,16 @@ public class VendingMachine<Item>
                 moneyInt -= (nickels * 5);
             }
         }
+        audit.write("CHANGE GIVEN:          $" + totalMoney + "    $" + "0.00");
         UserOutput.displayChangeMessage(dollars, quarters, dimes, nickels, changeDue);
         totalMoney = 0.0;
         moneyInserted = 0.0;
     }
+
+    public List<Items> getItems() {
+        return items;
+    }
+
 }
 
 
