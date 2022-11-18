@@ -29,7 +29,7 @@ public class VendingMachine
     private static final double DISCOUNT_AMOUNT = 1.00;
 
     public void loadFile() {
-        File file = new File("catering.csv");
+        File file = new File("catering1.csv");
         try(Scanner fileScanner = new Scanner(file)) {
 
             while(fileScanner.hasNext()) {
@@ -174,16 +174,14 @@ public class VendingMachine
                 moneyInt -= (nickels * 5);
             }
         }
-        audit.write("CHANGE GIVEN:          $" + totalMoney + "    $" + "0.00");
+        audit.write("CHANGE GIVEN:          $" + String.format("%.2f", totalMoney) + "    $" + "0.00");
         UserOutput.displayChangeMessage(dollars, quarters, dimes, nickels, changeDue);
         totalMoney = 0.0;
         moneyInserted = 0.0;
     }
-
     public List<Items> getItems() {
         return items;
     }
-
 }
 
 
