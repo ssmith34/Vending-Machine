@@ -3,16 +3,22 @@ package com.techelevator.application;
 import com.techelevator.models.*;
 import com.techelevator.ui.UserInput;
 import com.techelevator.ui.UserOutput;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class VendingMachine
 {
-    Sales sales = new Sales();
+    DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy hh-mm a");
+    LocalDateTime timeStamp = LocalDateTime.now();
+    String salesReportFileName = "SalesReport" + timeStamp.format(targetFormat) + ".txt";
+    Sales sales = new Sales(salesReportFileName);
     Audit audit = new Audit("Audit.txt");
     private List<Items> items = new ArrayList<>();
     private double moneyInserted;
@@ -92,7 +98,7 @@ public class VendingMachine
                 }
             }
             else if (choice.equals("sales report")) {
-                    // print sales report
+                    sales.write(items);
             } else if (choice.equals("exit")) {
                     // good bye
                     break;
@@ -105,16 +111,20 @@ public class VendingMachine
                 System.out.println("That item is no longer available, please choose again.");
                 return;
             }
+            if(chosenItem.equalsIgnoreCase(item.getSlotNumber()) && item.getPrice() > totalMoney) {
+                System.out.println("You do not have enough money, please try adding more or selecting a cheaper item.\n");
+                return;
+            }
             if(chosenItem.equalsIgnoreCase(item.getSlotNumber())) {
                 itemsPurchased++;
                 double beforePurchaseTotal = totalMoney;
                 if(itemsPurchased % 2 == 0) {
                     item.removeItem();
                     sales.setTotalSales(item.getPrice() - DISCOUNT_AMOUNT);
-                    sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
+                    item.setSoldAtDiscount(SOLD_PER_DISCOUNT);
                     totalMoney -= (item.getPrice() - DISCOUNT_AMOUNT);
                     System.out.println("Dispensing " + item.getName() + " for $"
-                            + (item.getPrice() - DISCOUNT_AMOUNT) + ", money remaining: $" +
+                            + String.format("%.2f", (item.getPrice() - DISCOUNT_AMOUNT)) + ", money remaining: $" +
                             String.format("%.2f", totalMoney));
                     System.out.println(item.getDispenseMessage());
                     audit.write(item.getName() + "        " + item.getSlotNumber() + " $"
@@ -125,7 +135,6 @@ public class VendingMachine
                 else {
                     item.removeItem();
                     sales.setTotalSales(item.getPrice());
-                    sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
                     totalMoney -= item.getPrice();
                     System.out.println("Dispensing " + item.getName() + " for $"
                             + item.getPrice() + ", money remaining: $" + String.format("%.2f", totalMoney));

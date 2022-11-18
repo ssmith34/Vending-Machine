@@ -6,6 +6,7 @@ public abstract class Items {
     private double price;
     private String slotNumber;
     private int amountLeft;
+    private int soldAtDiscount;
     private String dispenseMessage;
 
     public Items(String name, double price, String slotNumber, String dispenseMessage) {
@@ -13,6 +14,7 @@ public abstract class Items {
         this.price = price;
         this.slotNumber = slotNumber;
         amountLeft = 6;
+        soldAtDiscount = 0;
         this.dispenseMessage = dispenseMessage;
 
     }
@@ -35,6 +37,14 @@ public abstract class Items {
 
     public String getDispenseMessage() {
         return this.dispenseMessage;
+    }
+
+    public int getSoldAtDiscount() {
+        return this.soldAtDiscount;
+    }
+
+    public void setSoldAtDiscount(int itemSold) {
+        soldAtDiscount += itemSold;
     }
 
     public void removeItem() {
