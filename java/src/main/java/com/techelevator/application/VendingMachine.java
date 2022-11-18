@@ -74,7 +74,9 @@ public class VendingMachine<Item>
                             getItem(chosenItem);
                             break;
                         case "Finish":
-                            // reset itemsPurchased
+                            if(moneyInserted > 0.0) {
+                                getChange();
+                            }
                             keepGoing = false;
 
                     }
@@ -90,28 +92,62 @@ public class VendingMachine<Item>
     }
     private void getItem (String chosenItem){
         for(Items item : items) {
-            if(chosenItem.equals(item.getSlotNumber()) && item.getAmountLeft() == 0) {
+            if(chosenItem.equalsIgnoreCase(item.getSlotNumber()) && item.getAmountLeft() == 0) {
                 System.out.println("That item is no longer available, please choose again.");
                 return;
             }
-            if(chosenItem.equals(item.getSlotNumber())) {
+            if(chosenItem.equalsIgnoreCase(item.getSlotNumber())) {
                 itemsPurchased++;
                 if(itemsPurchased % 2 == 0) {
                     item.removeItem();
                     sales.setTotalSales(item.getPrice() - DISCOUNT_AMOUNT);
                     sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
                     moneyInserted -= item.getPrice() + DISCOUNT_AMOUNT;
+                    System.out.println("Dispensing " + item.getName() + " for $" + item.getPrice() + ", money remaining: $" + moneyInserted);
+                    System.out.println(item.getDispenseMessage());
+                    return;
                 }
-                else{
+                else {
                     item.removeItem();
                     sales.setTotalSales(item.getPrice());
                     sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
                     moneyInserted -= item.getPrice();
+                    System.out.println("Dispensing " + item.getName() + " for $" + item.getPrice() + ", money remaining: $" + moneyInserted);
+                    System.out.println(item.getDispenseMessage());
+                    return;
                 }
             }
         }
+        System.out.println("Invalid choice. Please try again.");
     }
 
+    public void getChange() {
+        double changeDue = moneyInserted;
+        int dollars = 0;
+        int quarters = 0;
+        int dimes = 0;
+        int nickels = 0;
+        int moneyInt = (int)((moneyInserted + 0.0001) * 100);
+        while(moneyInt > 0) {
+            if (moneyInt >= 100) {
+                dollars = moneyInt / 100;
+                moneyInt -= (dollars * 100);
+            }
+            if(moneyInt >= 25) {
+                quarters = moneyInt / 25;
+                moneyInt -= (quarters * 25);
+            }
+            if(moneyInt >= 10) {
+                dimes = moneyInt / 10;
+                moneyInt -= (dimes * 10);
+            }
+            if(moneyInt >= 5) {
+                nickels = moneyInt / 5;
+                moneyInt -= (nickels * 5);
+            }
+        }
+        UserOutput.displayChangeMessage(dollars, quarters, dimes, nickels, changeDue);
+    }
 }
 
 

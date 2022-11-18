@@ -64,4 +64,13 @@ public class UserOutput
         for (Items item : items)
             System.out.println(item);
     }
+
+    public static void displayChangeMessage(int dollars, int quarters, int dimes, int nickels, double changeDue) {
+        System.out.println("Thank you! Your change is:");
+        System.out.println(dollars + " dollars");
+        System.out.println(quarters + " quarters");
+        System.out.println(dimes + " dimes");
+        System.out.println(nickels + " nickels");
+        System.out.println("Total change: $" + changeDue);
+    }
 }
