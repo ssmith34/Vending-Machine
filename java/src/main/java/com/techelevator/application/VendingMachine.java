@@ -19,6 +19,7 @@ public class VendingMachine<Item>
     private String chosenItem;
     private int itemsPurchased;
     private static final int SOLD_PER_DISCOUNT = 1;
+    private static final double DISCOUNT_AMOUNT = 1.00;
 
     public void loadFile() {
         File file = new File("catering.csv");
@@ -97,9 +98,9 @@ public class VendingMachine<Item>
                 itemsPurchased++;
                 if(itemsPurchased % 2 == 0) {
                     item.removeItem();
-                    sales.setTotalSales(item.getPrice() - 1.00);
+                    sales.setTotalSales(item.getPrice() - DISCOUNT_AMOUNT);
                     sales.setSoldAtDiscount(item.getName(), SOLD_PER_DISCOUNT);
-                    moneyInserted -= item.getPrice() + 1.00;
+                    moneyInserted -= item.getPrice() + DISCOUNT_AMOUNT;
                 }
                 else{
                     item.removeItem();
