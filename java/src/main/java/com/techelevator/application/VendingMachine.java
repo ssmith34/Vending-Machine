@@ -106,6 +106,7 @@ public class VendingMachine<Item>
             }
             if(chosenItem.equalsIgnoreCase(item.getSlotNumber())) {
                 itemsPurchased++;
+                double beforePurchaseTotal = totalMoney;
                 if(itemsPurchased % 2 == 0) {
                     item.removeItem();
                     sales.setTotalSales(item.getPrice() - DISCOUNT_AMOUNT);
@@ -114,6 +115,9 @@ public class VendingMachine<Item>
                     System.out.println("Dispensing " + item.getName() + " for $"
                             + (item.getPrice() - DISCOUNT_AMOUNT) + ", money remaining: $" + String.format("%.2f", totalMoney));
                     System.out.println(item.getDispenseMessage());
+                    audit.write(item.getName() + "        " + item.getSlotNumber() + " $"
+                            + String.format("%.2f", beforePurchaseTotal) + "    $"
+                            + String.format("%.2f", totalMoney));
                     return;
                 }
                 else {
@@ -124,6 +128,9 @@ public class VendingMachine<Item>
                     System.out.println("Dispensing " + item.getName() + " for $"
                             + item.getPrice() + ", money remaining: $" + String.format("%.2f", totalMoney));
                     System.out.println(item.getDispenseMessage());
+                    audit.write(item.getName() + "        " + item.getSlotNumber() + " $"
+                            + String.format("%.2f", beforePurchaseTotal) + "    $"
+                            + String.format("%.2f", totalMoney));
                     return;
                 }
             }
